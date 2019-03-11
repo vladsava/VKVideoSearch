@@ -13,6 +13,8 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
     var loginView:WKWebView!
     var token: String!
     
+   
+    
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         loginView = WKWebView(frame: .zero, configuration: webConfiguration)
@@ -20,6 +22,8 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         view = loginView
         
     }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +37,20 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
+        if let urlStr = navigationAction.request.url?.absoluteString {
+            if urlStr.contains("access_token=") {
+                token = String(urlStr.components(separatedBy: "access_token=")[1].split(separator: "&")[0])
+               //self.performSegue(withIdentifier: "tokenSegue", sender: self)
+                let tableController = TableViewController()
+                tableController.token = token
+                self.navigationController?.pushViewController(tableController, animated: false)
+            }
+            
+        }
+        decisionHandler(.allow)
+    }
+   
 }
 
