@@ -29,7 +29,7 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         super.viewDidLoad()
         
         loginView.navigationDelegate = self
-        let myURL = URL(string:"https://oauth.vk.com/authorize?client_id=6895508&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=video&response_type=token&v=5.52")
+        let myURL = URL(string:"https://oauth.vk.com/authorize?client_id=6889060&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=video&response_type=token&v=5.52")
         let myRequest = URLRequest(url: myURL!)
         loginView.load(myRequest)
         //6895508

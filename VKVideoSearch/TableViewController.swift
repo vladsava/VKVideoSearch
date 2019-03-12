@@ -88,12 +88,13 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBAction func Search(_ sender: Any) {
         print("Поиск")
+        
     }
     
     // MARK: - Navigation
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let playController = PlayViewController()
-        playController.videoURL = videos[indexPath.row]["player"] as? String
+        playController.video = videos[indexPath.row]
         self.navigationController?.pushViewController(playController, animated: true)
     }
     
