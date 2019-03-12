@@ -42,7 +42,7 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         if let urlStr = navigationAction.request.url?.absoluteString {
             if urlStr.contains("access_token=") {
                 token = String(urlStr.components(separatedBy: "access_token=")[1].split(separator: "&")[0])
-               //self.performSegue(withIdentifier: "tokenSegue", sender: self)
+               
                 let tableController = TableViewController()
                 tableController.token = token
                 self.navigationController?.pushViewController(tableController, animated: false)

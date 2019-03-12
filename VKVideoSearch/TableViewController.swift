@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate {
+class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     var token: String!
     var model1: [[String: Any]] = []
@@ -20,7 +20,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
     fileprivate let session = URLSession(configuration: URLSessionConfiguration.default)
     
     func getVideos(word: String, num: Int) {
-        let sourceURL = "https://api.vk.com/method/video.search?access_token=\(String(token))&q=\(word)&sort=2&adult=0&offset=\(num)&count=40&v=5.92"
+        let sourceURL = "https://api.vk.com/method/video.search?access_token=\(String(token))&q=\(word)&sort=2&adult=0&offset=\(num)&count=40&v=5.54"
         print("\(sourceURL)")
         let encodedSourceURL = sourceURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
         print("\(encodedSourceURL!)")
@@ -33,14 +33,17 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
             guard let data = data, let _models = try? JSONSerialization.jsonObject(with: data, options: .allowFragments), let models = _models as? [String: Any] else {
                 return
             }
-            
+           // print("\(models)")
+            if models["error"]==nil {
             self.model1 = (models["response"] as? [String: Any])?["items"] as! [[String : Any]]
             //print("\(self.model1)")
             self.videos.append(contentsOf: self.model1)
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-            }
+                }
+                
+            } else {print("Error")}
             }.resume()
     }
     
@@ -65,12 +68,16 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TableCell")
         self.view.addSubview(tableView)
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo:view.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo:view.bottomAnchor).isActive = true
-        tableView.dataSource = self
+        tableView.estimatedRowHeight = 80.0
+        
+        
         
         
         
@@ -84,7 +91,15 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
     }
     
     // MARK: - Navigation
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let playController = PlayViewController()
+        playController.videoURL = videos[indexPath.row]["player"] as? String
+        self.navigationController?.pushViewController(playController, animated: true)
+    }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return videos.count
@@ -92,17 +107,15 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.row >= (videos.count-10) {
+        if indexPath.row == (videos.count-10) {
             getVideos(word: word, num: videos.count)
-            print("gogogogogo")
+            print("i=\(indexPath.row)  v= \(videos.count) gogogogogo")
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath)
-        
-        print("\(videos[indexPath.row]["duration"]!)")
+        print("\(videos[indexPath.row])")
         let min = (videos[indexPath.row]["duration"]! as? Int)!/60
         let sec = (videos[indexPath.row]["duration"]! as? Int)!%60
-        
         cell.textLabel?.text = "\(min)"  + ":" + (sec <= 9 ? "0" : "") + "\(sec)" + " " + ((videos[indexPath.row]["title"] as? String)!)
         
         let imageURL: URL = URL(string: videos[indexPath.row]["photo_130"] as! String)!
@@ -111,6 +124,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
             if let data = try? Data(contentsOf: imageURL){
                 DispatchQueue.main.async {
                     cell.imageView?.image = UIImage(data: data)
+                    //cell.reloadInputViews()
                 }
             }
          }
@@ -120,9 +134,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UISearchBarD
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("\(self.searchBar.text!)")
         self.videos.removeAll()
+        tableView.reloadData()
         self.word = self.searchBar.text!
-        //resignFirstResponder()
-        self.view.endEditing(true)
+        self.searchBar.endEditing(true)
         getVideos(word: word, num: 0)
     }
     
