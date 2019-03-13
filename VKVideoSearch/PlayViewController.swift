@@ -28,12 +28,12 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         webView.navigationDelegate = self
         webView.load(request)
         self.view.addSubview(webView)
+        
         webView.scrollView.isScrollEnabled = false
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100).isActive = true
         webView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
-        webView.sizeToFit()
         webView.heightAnchor.constraint(greaterThanOrEqualTo: self.view.heightAnchor, multiplier: 0.35).isActive = true
        
         //Добавляем поле для названия

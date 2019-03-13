@@ -12,6 +12,7 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     var loginView:WKWebView!
     var token: String!
+    var userID: String!
     
    
     
@@ -41,10 +42,13 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         
         if let urlStr = navigationAction.request.url?.absoluteString {
             if urlStr.contains("access_token=") {
+                userID = String(urlStr.components(separatedBy: "user_id=")[1])
                 token = String(urlStr.components(separatedBy: "access_token=")[1].split(separator: "&")[0])
-               
+                
+                UserDefaults.standard.set(token, forKey: "AccessToken")
+                UserDefaults.standard.set(userID, forKey: "User_ID")
+                
                 let tableController = TableViewController()
-                tableController.token = token
                 self.navigationController?.pushViewController(tableController, animated: false)
             }
             

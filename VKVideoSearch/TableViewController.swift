@@ -11,19 +11,21 @@ import UIKit
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     var token: String!
+    var userID: String!
     var model1: [[String: Any]] = []
+    var countOfVideos: Int!
     var videos: [[String: Any]] = []
-    var word: String!
+    var word: String! = ""
     let tableView = UITableView()
     let searchBar = UISearchBar()
+    var method = "get"
     
     fileprivate let session = URLSession(configuration: URLSessionConfiguration.default)
     
     //Загрузка порции данных
-    func getVideos(word: String, num: Int) {
-        let sourceURL = "https://api.vk.com/method/video.search?access_token=\(String(token))&q=\(word)&sort=2&adult=0&offset=\(num)&count=40&v=5.54"
+    func getVideos(word: String, num: Int, method: String) {
+        let sourceURL = (method=="search" ? "https://api.vk.com/method/video.search?access_token=\(String(token))&q=\(word)&sort=2&adult=0&offset=\(num)&count=40&v=5.92" : "https://api.vk.com/method/video.get?access_token=\(String(token))&offset=\(num)&count=40&v=5.92")
         let encodedSourceURL = sourceURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
-        print("\(encodedSourceURL!)")
         session.dataTask(with: URL(string: encodedSourceURL!)!) { data, resp, err in
             guard err == nil else {
                 print("error getting file: \(err!)")
@@ -35,6 +37,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
            
             if models["error"]==nil {
+            self.countOfVideos = (models["response"] as? [String: Any])?["count"] as? Int
             self.model1 = (models["response"] as? [String: Any])?["items"] as! [[String : Any]]
             self.videos.append(contentsOf: self.model1)
             
@@ -48,6 +51,10 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        token = UserDefaults.standard.string(forKey: "AccessToken")
+        userID = UserDefaults.standard.string(forKey: "User_ID")
+        getVideos(word: "", num: 0, method: method)
         
         self.view.backgroundColor = UIColor.white
         self.navigationItem.hidesBackButton = true
@@ -93,10 +100,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.row == (videos.count-10) {
-            getVideos(word: word, num: videos.count)
-            print("i=\(indexPath.row)  v= \(videos.count) gogogogogo")
+        if (indexPath.row == (videos.count-10)) && (videos.count != countOfVideos!) {
+            getVideos(word: word, num: videos.count, method: method)
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as? CustomTableViewCell
@@ -105,7 +110,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell?.duration.text = "\(min)"  + ":" + (sec <= 9 ? "0" : "") + "\(sec)"
         cell?.title.text = videos[indexPath.row]["title"] as? String
         
-        let imageURL: URL = URL(string: videos[indexPath.row]["photo_130"] as! String)!
+        cell?.imageVideo.image = nil
+        let imageURL: URL = URL(string: videos[indexPath.row]["photo_320"] as! String)!
         let queue = DispatchQueue.global(qos: .utility)
         queue.async{
             if let data = try? Data(contentsOf: imageURL){
@@ -124,7 +130,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.reloadData()
         self.word = self.searchBar.text!
         self.searchBar.endEditing(true)
-        getVideos(word: word, num: 0)
+        method = "search"
+        getVideos(word: word, num: 0, method: method)
     }
     
 }
