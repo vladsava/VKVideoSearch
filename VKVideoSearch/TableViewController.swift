@@ -105,9 +105,16 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as? CustomTableViewCell
-        let min = (videos[indexPath.row]["duration"]! as? Int)!/60
-        let sec = (videos[indexPath.row]["duration"]! as? Int)!%60
-        cell?.duration.text = "\(min)"  + ":" + (sec <= 9 ? "0" : "") + "\(sec)"
+        let time = (videos[indexPath.row]["duration"]! as? Int)!
+        var timeS = ""
+        let hour = time/3600
+        let min = time%3600/60
+        let sec = time%60
+        timeS+=(hour == 0 ? "" : "\(hour):")
+        if (hour>0)&&(min<10) {timeS+="0\(min):"}
+            else {timeS+="\(min):"}
+        timeS+=(sec <= 9 ? "0\(sec)" : "\(sec)")
+        cell?.duration.text = timeS
         cell?.title.text = videos[indexPath.row]["title"] as? String
         
         cell?.imageVideo.image = nil

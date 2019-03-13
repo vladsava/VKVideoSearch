@@ -59,9 +59,16 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         durationLabel.textColor = UIColor.gray
         durationLabel.numberOfLines = 0
         durationLabel.translatesAutoresizingMaskIntoConstraints = false
-        let min = (video["duration"]! as? Int)!/60
-        let sec = (video["duration"]! as? Int)!%60
-        durationLabel.text = "\(min)"  + ":" + (sec <= 9 ? "0" : "") + "\(sec)"
+        let time = (video["duration"]! as? Int)!
+        var timeS = ""
+        let hour = time/3600
+        let min = time%3600/60
+        let sec = time%60
+        timeS+=(hour == 0 ? "" : "\(hour):")
+        if (hour>0)&&(min<10) {timeS+="0\(min):"}
+        else {timeS+="\(min):"}
+        timeS+=(sec <= 9 ? "0\(sec)" : "\(sec)")
+        durationLabel.text = timeS
         durationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
         durationLabel.leftAnchor.constraint(equalTo:view.leftAnchor, constant: 10).isActive = true
     }
