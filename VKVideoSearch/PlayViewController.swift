@@ -14,6 +14,7 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
     
     var webView : WKWebView!
     var video: [String: Any] = [:]
+    var webViewHeighAchorConstraint: NSLayoutConstraint? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +32,11 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         
         webView.scrollView.isScrollEnabled = false
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100).isActive = true
+        webView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         webView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
-        webView.heightAnchor.constraint(greaterThanOrEqualTo: self.view.heightAnchor, multiplier: 0.35).isActive = true
+        webViewHeighAchorConstraint = webView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4)
+        webViewHeighAchorConstraint?.isActive = true
        
         //Добавляем поле для названия
         let titleLabel = UILabel()
@@ -43,11 +45,6 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 0
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-  /*      let horizontalConstraint = NSLayoutConstraint(item: titleLabel, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute:NSLayoutConstraint.Attribute.trailing, multiplier: 1, constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: titleLabel, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: webView, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 50)
-        NSLayoutConstraint.activate([horizontalConstraint, verticalConstraint]) */
-        
         titleLabel.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 20).isActive = true
         titleLabel.leftAnchor.constraint(equalTo:view.leftAnchor, constant: 10).isActive = true
         titleLabel.rightAnchor.constraint(equalTo:view.rightAnchor, constant: -10).isActive = true
@@ -71,6 +68,20 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         durationLabel.text = timeS
         durationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
         durationLabel.leftAnchor.constraint(equalTo:view.leftAnchor, constant: 10).isActive = true
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape {
+            self.navigationController?.navigationBar.isHidden = true
+            webViewHeighAchorConstraint?.isActive = false
+            webViewHeighAchorConstraint = webView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 1)
+            webViewHeighAchorConstraint?.isActive = true
+        } else {
+            self.navigationController?.navigationBar.isHidden = false
+            webViewHeighAchorConstraint?.isActive = false
+            webViewHeighAchorConstraint = webView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4)
+            webViewHeighAchorConstraint?.isActive = true
+        }
     }
     
     override func didReceiveMemoryWarning() {

@@ -14,8 +14,6 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
     var token: String!
     var userID: String!
     
-   
-    
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         loginView = WKWebView(frame: .zero, configuration: webConfiguration)
@@ -23,8 +21,6 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         view = loginView
         
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
