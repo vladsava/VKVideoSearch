@@ -10,8 +10,6 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
-    var token: String!
-    var userID: String!
     var countOfVideos: Int!
     var videos: [videoModel] = []
     var word: String! = ""
@@ -23,8 +21,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        token = UserDefaults.standard.string(forKey: "AccessToken")
-        userID = UserDefaults.standard.string(forKey: "User_ID")
         getNewVideos(word: "", num: 0, method: method)
         
         self.view.backgroundColor = UIColor.white
@@ -50,7 +46,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo:view.bottomAnchor).isActive = true
-        tableView.estimatedRowHeight = 80.0
+        tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableView.automaticDimension
         
     }
@@ -86,7 +82,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         queue.async{
             if let data = try? Data(contentsOf: imageURL){
                 DispatchQueue.main.async {
-                    cell.imageVideo.image = UIImage(data: data)
+                        cell.imageVideo.image = UIImage(data: data)
                 }
             }
         }
@@ -107,10 +103,10 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     // MARK: - Functions
     
     @objc func cancel() {
-        self.searchBar.text = ""
-        self.searchBar.endEditing(true)
         self.videos.removeAll()
         tableView.reloadData()
+        self.searchBar.text = ""
+        self.searchBar.endEditing(true)
         method = "get"
         tableView.reloadData()
         getNewVideos(word: word, num: 0, method: method)

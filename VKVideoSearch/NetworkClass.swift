@@ -15,7 +15,13 @@ class NetworkClass: NSObject {
     static func getVideoModels(word: String, num: Int, method: String, completionHandler: @escaping (_ result: [[String : Any]],_ count: Int?) -> ()) {
         
         guard let token = UserDefaults.standard.string(forKey: "AccessToken") else {return}
-        let sourceURL = (method=="search" ? "https://api.vk.com/method/video.search?access_token=\(token)&q=\(word)&sort=2&adult=0&offset=\(num)&count=40&v=5.92" : "https://api.vk.com/method/video.get?access_token=\(token)&offset=\(num)&count=40&v=5.92")
+        let sourceURL: String
+        if method == "get" {
+            sourceURL = "https://api.vk.com/method/video.get?access_token=\(token)&offset=\(num)&count=40&v=5.92"
+        } else {
+            sourceURL = "https://api.vk.com/method/video.search?access_token=\(token)&q=\(word)&sort=2&adult=0&offset=\(num)&count=40&v=5.92"
+            
+        }
         let encodedSourceURL = sourceURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
         
         session.dataTask(with: URL(string: encodedSourceURL!)!) { data, resp, err in

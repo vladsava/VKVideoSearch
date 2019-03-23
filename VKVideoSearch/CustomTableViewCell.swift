@@ -17,30 +17,30 @@ class CustomTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        imageVideo.backgroundColor = UIColor.lightGray
-        
-        imageVideo.translatesAutoresizingMaskIntoConstraints = false
-        title.translatesAutoresizingMaskIntoConstraints = false
-        duration.translatesAutoresizingMaskIntoConstraints = false
-        
         contentView.addSubview(imageVideo)
+        imageVideo.backgroundColor = UIColor.lightGray
+        imageVideo.translatesAutoresizingMaskIntoConstraints = false
+        imageVideo.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        imageVideo.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        imageVideo.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10).isActive = true
+        imageVideo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        imageVideo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        
+        
         contentView.addSubview(title)
-        contentView.addSubview(duration)
-        
         title.numberOfLines = 2
-        
-        let viewsDict = [
-            "image" : imageVideo,
-            "title" : title,
-            "duration" : duration,
-            ]
-        
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[image(80)]-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[title]-[duration]-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[image(130)]-[title]-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[image(130)]-[duration]", options: [], metrics: nil, views: viewsDict))
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.leadingAnchor.constraint(equalTo: imageVideo.trailingAnchor, constant: 10).isActive = true
+        title.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
+        title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
         
         
+        contentView.addSubview(duration)
+        duration.translatesAutoresizingMaskIntoConstraints = false
+        duration.leadingAnchor.constraint(equalTo: imageVideo.trailingAnchor, constant: 10).isActive = true
+        duration.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        duration.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
+    
     }
     
     required init?(coder aDecoder: NSCoder) {
