@@ -17,6 +17,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     let searchBar = UISearchBar()
     var method = "get"
     var cellIdentifier = "TableCell"
+    var doneButton: UIBarButtonItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +26,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.backgroundColor = UIColor.white
         self.navigationItem.hidesBackButton = true
-        let doneButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(TableViewController.cancel))
-        self.navigationItem.setRightBarButton(doneButton, animated: true)
+        doneButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(TableViewController.cancel))
         
         //Создание searchBar
         searchBar.searchBarStyle = UISearchBar.Style.prominent
@@ -100,16 +100,22 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         getNewVideos(word: word, num: 0, method: method)
     }
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.navigationItem.setRightBarButton(doneButton, animated: true)
+    }
+    
     // MARK: - Functions
     
     @objc func cancel() {
-        self.videos.removeAll()
-        tableView.reloadData()
+        self.navigationItem.rightBarButtonItem = nil
         self.searchBar.text = ""
         self.searchBar.endEditing(true)
-        method = "get"
-        tableView.reloadData()
-        getNewVideos(word: word, num: 0, method: method)
+        if method != "get" {
+            method = "get"
+            self.videos.removeAll()
+            tableView.reloadData()
+            getNewVideos(word: word, num: 0, method: method)
+        }
     }
     
     func getNewVideos(word: String, num: Int, method: String) {

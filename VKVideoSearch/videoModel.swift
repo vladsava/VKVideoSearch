@@ -20,7 +20,7 @@ class videoModel: NSObject {
         
         NetworkClass.getVideoModels(word: word, num: num, method: method) {result, count in
             for video in result {
-                videoArray.append(videoModel.init(imageURL: video["photo_320"] as? String, title: video["title"] as? String, duration: (video["duration"] as? Int)?.asString(style: .positional), player:  video["player"] as? String))
+                videoArray.append(videoModel.init(imageURL: video["photo_320"] as? String, title: video["title"] as? String, duration: (video["duration"] as? Int)?.asString(style: .abbreviated), player:  video["player"] as? String))
             }
             completionHandler(videoArray, count)
         }
@@ -43,8 +43,11 @@ class videoModel: NSObject {
 extension Int {
     func asString(style: DateComponentsFormatter.UnitsStyle) -> String {
         let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute, .second, .nanosecond]
+        formatter.allowedUnits = [.hour, .minute, .second]
         formatter.unitsStyle = style
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: "ru")
+        formatter.calendar = calendar
         guard let formattedString = formatter.string(from: TimeInterval(self)) else { return "" }
         return formattedString
     }
