@@ -14,6 +14,8 @@
 		CE38A0422236FC3100EDE7DC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38A0412236FC3100EDE7DC /* TableViewController.swift */; };
 		CE38A048223806C700EDE7DC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38A047223806C700EDE7DC /* PlayViewController.swift */; };
 		CE38A04C2238500900EDE7DC /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38A04B2238500900EDE7DC /* CustomTableViewCell.swift */; };
+		CEC8C49D22461C2D00C4363A /* NetworkClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8C49C22461C2D00C4363A /* NetworkClass.swift */; };
+		CEC8C49F22461C4C00C4363A /* videoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8C49E22461C4C00C4363A /* videoModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		CE38A0412236FC3100EDE7DC /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		CE38A047223806C700EDE7DC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		CE38A04B2238500900EDE7DC /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		CEC8C49C22461C2D00C4363A /* NetworkClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClass.swift; sourceTree = "<group>"; };
+		CEC8C49E22461C4C00C4363A /* videoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,8 @@
 				CE38A02D223646BE00EDE7DC /* AppDelegate.swift */,
 				CE38A02F223646BE00EDE7DC /* ViewController.swift */,
 				CE38A0412236FC3100EDE7DC /* TableViewController.swift */,
+				CEC8C49C22461C2D00C4363A /* NetworkClass.swift */,
+				CEC8C49E22461C4C00C4363A /* videoModel.swift */,
 				CE38A047223806C700EDE7DC /* PlayViewController.swift */,
 				CE38A04B2238500900EDE7DC /* CustomTableViewCell.swift */,
 				CE38A034223646C000EDE7DC /* Assets.xcassets */,
@@ -140,11 +146,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEC8C49F22461C4C00C4363A /* videoModel.swift in Sources */,
 				CE38A048223806C700EDE7DC /* PlayViewController.swift in Sources */,
 				CE38A04C2238500900EDE7DC /* CustomTableViewCell.swift in Sources */,
 				CE38A030223646BE00EDE7DC /* ViewController.swift in Sources */,
 				CE38A0422236FC3100EDE7DC /* TableViewController.swift in Sources */,
 				CE38A02E223646BE00EDE7DC /* AppDelegate.swift in Sources */,
+				CEC8C49D22461C2D00C4363A /* NetworkClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

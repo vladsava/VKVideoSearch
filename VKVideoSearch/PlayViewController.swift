@@ -13,7 +13,7 @@ import WebKit
 class PlayViewController: UIViewController , WKNavigationDelegate{
     
     var webView : WKWebView!
-    var video: [String: Any] = [:]
+    var video: videoModel?
     var webViewHeighAchorConstraint: NSLayoutConstraint? = nil
     
     override func viewDidLoad() {
@@ -22,7 +22,7 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         self.view.backgroundColor = UIColor.white
         
         //Добавляем проигрыватель видео
-        let videoURL = video["player"]! as? String
+        let videoURL = video?.player
         let url = URL(string: videoURL!)
         let request = URLRequest(url: url!)
         webView = WKWebView()
@@ -37,11 +37,11 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         webView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
         webViewHeighAchorConstraint = webView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4)
         webViewHeighAchorConstraint?.isActive = true
-       
+        
         //Добавляем поле для названия
         let titleLabel = UILabel()
         self.view.addSubview(titleLabel)
-        titleLabel.text = video["title"]! as? String
+        titleLabel.text = video?.title
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 0
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -56,16 +56,7 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
         durationLabel.textColor = UIColor.gray
         durationLabel.numberOfLines = 0
         durationLabel.translatesAutoresizingMaskIntoConstraints = false
-        let time = (video["duration"]! as? Int)!
-        var timeS = ""
-        let hour = time/3600
-        let min = time%3600/60
-        let sec = time%60
-        timeS+=(hour == 0 ? "" : "\(hour):")
-        if (hour>0)&&(min<10) {timeS+="0\(min):"}
-        else {timeS+="\(min):"}
-        timeS+=(sec <= 9 ? "0\(sec)" : "\(sec)")
-        durationLabel.text = timeS
+        durationLabel.text = video?.duration
         durationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
         durationLabel.leftAnchor.constraint(equalTo:view.leftAnchor, constant: 10).isActive = true
     }
@@ -73,12 +64,13 @@ class PlayViewController: UIViewController , WKNavigationDelegate{
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if UIDevice.current.orientation.isLandscape {
             self.navigationController?.navigationBar.isHidden = true
-            webViewHeighAchorConstraint?.isActive = false
+            self.view.removeConstraint(webViewHeighAchorConstraint!)
             webViewHeighAchorConstraint = webView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 1)
             webViewHeighAchorConstraint?.isActive = true
+            
         } else {
             self.navigationController?.navigationBar.isHidden = false
-            webViewHeighAchorConstraint?.isActive = false
+            self.view.removeConstraint(webViewHeighAchorConstraint!)
             webViewHeighAchorConstraint = webView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4)
             webViewHeighAchorConstraint?.isActive = true
         }
