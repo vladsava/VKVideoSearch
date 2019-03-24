@@ -73,7 +73,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CustomTableViewCell else { return UITableViewCell()}
-        
         cell.duration.text = videos[indexPath.row].duration!
         cell.title.text = videos[indexPath.row].title!
         cell.imageVideo.image = nil
@@ -82,7 +81,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         queue.async{
             if let data = try? Data(contentsOf: imageURL){
                 DispatchQueue.main.async {
+                    if (tableView.cellForRow(at: indexPath) != nil) {
                         cell.imageVideo.image = UIImage(data: data)
+                    }
                 }
             }
         }
